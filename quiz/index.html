@@ -1,0 +1,513 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Caselet of the Week: Kokoa &mdash; The India Play</title>
+<style>
+  :root{
+    --ink:#1e293b;
+    --navy:#073763;
+    --paper:#f2f1f6;
+    --panel:#ffffff;
+    --line:#cbd5e1;
+    --lightblue:#cfe2f3;
+    --accent:#5846c8;
+    --slate:#64748b;
+    --good:#16663f;
+    --good-bg:#d1f5df;
+    --bad:#a3281b;
+    --bad-bg:#fde2e1;
+  }
+
+  /* --- Force Georgia on every element --- */
+  *, *::before, *::after {
+    box-sizing: border-box;
+    font-family: Georgia, 'Times New Roman', serif !important;
+  }
+
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    line-height:1.55;
+  }
+  .wrap{max-width:640px;margin:0 auto;background:var(--panel);}
+
+  .header{padding:20px 24px 0;}
+  .badge-row{margin-bottom:8px;}
+  .badge{
+    display:inline-block;
+    background:var(--lightblue);
+    color:var(--navy);
+    font-size:12px;
+    letter-spacing:.02em;
+    padding:4px 10px;
+    border-radius:3px;
+  }
+  h1{
+    font-size:24px;
+    line-height:1.25;
+    color:var(--navy);
+    margin:6px 0 8px;
+  }
+  .byline{
+    font-size:12.5px;
+    color:var(--slate);
+    margin-bottom:18px;
+    padding-bottom:18px;
+    border-bottom:1px solid var(--line);
+  }
+
+  .lede{padding:0 24px;}
+  .lede p{font-size:14px;margin:0 0 12px;}
+  .framework{
+    font-size:16px;
+    font-weight:bold;
+    color:var(--navy);
+    margin:16px 0 12px;
+  }
+  .prompts{margin:0 0 26px;padding-left:18px;}
+  .prompts li{font-size:13px;margin-bottom:6px;}
+  .prompts strong{color:var(--navy);}
+
+  /* --- progress --- */
+  .progress-shell{padding:0 24px;margin-bottom:6px;}
+  .progress-track{
+    height:4px;
+    background:var(--lightblue);
+    border-radius:2px;
+    overflow:hidden;
+  }
+  .progress-fill{
+    height:100%;
+    width:0%;
+    background:var(--navy);
+    transition:width .35s ease;
+  }
+  .progress-label{
+    font-size:11px;
+    color:var(--slate);
+    margin:6px 0 20px;
+  }
+
+  /* --- quiz card --- */
+  .quizwrap{padding:0 24px;}
+  .card{
+    border-top:1px solid var(--line);
+    padding:20px 0;
+  }
+  .qcount{
+    font-size:12.5px;
+    color:var(--slate);
+    margin-bottom:4px;
+  }
+  .qtext{
+    font-weight:bold;
+    font-size:15px;
+    margin:0 0 12px;
+    color:var(--ink);
+  }
+
+  .css-quiz-group{margin:0 0 8px;font-size:13px;}
+  .css-quiz-opt{
+    display:flex;
+    align-items:stretch;
+    width:100%;
+    text-align:left;
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:6px;
+    padding:10px 12px;
+    margin-bottom:6px;
+    font-size:13px;
+    color:var(--ink);
+    cursor:pointer;
+    transition:border-color .15s ease, background-color .15s ease;
+  }
+  .css-quiz-opt:hover:not(:disabled){border-color:var(--navy);}
+  .css-quiz-opt:disabled{cursor:default;}
+  .css-quiz-opt.correct{background:var(--good-bg);color:var(--good);font-weight:bold;border-color:var(--good);}
+  .css-quiz-opt.wrong{background:var(--bad-bg);color:var(--bad);font-weight:bold;border-color:var(--bad);}
+  .css-quiz-opt.dim{opacity:.55;}
+
+  .feedback{display:none;font-size:13px;color:#334155;}
+  .feedback.show{display:block;}
+  .feedback .why{margin:10px 0 10px;}
+  .feedback .why strong{color:var(--ink);}
+  .learnt{
+    background:#f8fafc;
+    border-left:3px solid var(--accent);
+    padding:8px 10px;
+  }
+  .learnt strong{display:block;color:var(--ink);margin-bottom:2px;}
+
+  .navrow{text-align:right;margin-top:14px;}
+  .nextbtn,.prevbtn{
+    font-size:13px;
+    border:none;
+    padding:9px 18px;
+    border-radius:4px;
+    cursor:pointer;
+    transition:background-color .15s ease;
+  }
+  .nextbtn{background:var(--navy);color:#fff;}
+  .nextbtn:hover:not(:disabled){background:#0d4a7d;}
+  .nextbtn:disabled{opacity:.4;cursor:default;}
+  .prevbtn{background:#fff;color:var(--navy);border:1px solid var(--line);margin-right:8px;}
+  .prevbtn:hover:not(:disabled){border-color:var(--navy);}
+  .prevbtn:disabled{opacity:.4;cursor:default;}
+
+  /* --- results --- */
+  .results{display:none;padding:0 24px 8px;}
+  .results.show{display:block;}
+  .score-hero{
+    text-align:center;
+    padding:22px 16px;
+    background:var(--lightblue);
+    border-radius:6px;
+    margin:20px 0 24px;
+  }
+  .score-eyebrow{
+    font-size:11.5px;
+    letter-spacing:.05em;
+    text-transform:uppercase;
+    color:var(--navy);
+    margin-bottom:6px;
+  }
+  .score-num{
+    font-size:34px;
+    font-weight:bold;
+    color:var(--navy);
+  }
+  .rank-title{
+    display:inline-block;
+    margin-top:8px;
+    font-size:13px;
+    font-weight:bold;
+    letter-spacing:.02em;
+    color:var(--accent);
+    background:#fff;
+    border:1px solid var(--accent);
+    border-radius:3px;
+    padding:4px 12px;
+  }
+  .score-sub{
+    font-size:13px;
+    color:#1e3a5f;
+    margin-top:10px;
+  }
+
+  .recap-title{
+    text-align:center;
+    font-size:18px;
+    color:var(--navy);
+    margin:0 0 14px;
+  }
+  table.recap{
+    width:100%;
+    border-collapse:collapse;
+    font-size:12px;
+    margin-bottom:8px;
+  }
+  table.recap th,table.recap td{
+    border:1px solid var(--line);
+    padding:6px 8px;
+    text-align:left;
+    vertical-align:top;
+  }
+  table.recap th{
+    font-weight:bold;
+    background:#f8fafc;
+    width:32%;
+    color:var(--navy);
+  }
+
+  .signoff{
+    padding:20px 24px;
+    font-size:13px;
+    color:#1e293b;
+  }
+  .signoff strong{display:block;margin-bottom:2px;}
+
+  @media (max-width:480px){
+    h1{font-size:20px;}
+    .score-num{font-size:28px;}
+  }
+  @media (prefers-reduced-motion:reduce){*{transition:none !important;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="header">
+    <div class="badge-row"><span class="badge">Caselet of the Week</span></div>
+    <h1>Kokoa &mdash; The India Play</h1>
+  </div>
+
+  <div class="lede" id="lede">
+    <p>This caselet works through an artisan chocolate brand's pan-India expansion decision using a simple four-step framework: understand the opportunity, size the market, assess the expansion risks, and choose the right channels.</p>
+    <p>Not every number deserves equal weight. Focus first on separating an upper-bound estimate from the realistic addressable market.</p>
+
+    <div class="framework">Understand the Opportunity &rarr; Size the Market &rarr; Assess the Risks &rarr; Choose the Channels</div>
+
+    <ul class="prompts">
+      <li><strong>Is the market large enough?</strong> Establish whether the addressable premium chocolate market can support Kokoa's revenue ambition.</li>
+      <li><strong>What are the major risks of expansion?</strong> Identify what could undermine the brand premium Kokoa is trying to preserve.</li>
+      <li><strong>Which channels should Kokoa use?</strong> Compare channels on speed to scale, margin contribution and brand fit, and sequence them over time.</li>
+    </ul>
+  </div>
+
+  <div class="progress-shell">
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="progress-label" id="progressLabel">Question 1 of 8</div>
+  </div>
+
+  <div class="quizwrap" id="quiz"></div>
+
+  <div class="results" id="results">
+    <div class="score-hero">
+      <div class="score-eyebrow">Case complete</div>
+      <div class="score-num"><span id="scoreVal">0</span>/8</div>
+      <div class="rank-title" id="rankTitle"></div>
+      <div class="score-sub" id="scoreMsg"></div>
+    </div>
+
+    <h2 class="recap-title">Did you get it right?</h2>
+    <table class="recap">
+      <tr><th>Concept</th><th>What you learnt</th></tr>
+      <tr><td>Market Sizing</td><td>Estimating the potential opportunity for a product or service using a structured set of assumptions.</td></tr>
+      <tr><td>Market Share</td><td>The percentage of the relevant market captured by a company. Comparing a revenue target with market size helps determine the share required to achieve that target.</td></tr>
+      <tr><td>Market Entry Strategy</td><td>Deciding how a company should enter or expand into a market, including the channels, timing and level of investment required.</td></tr>
+      <tr><td>Channel Strategy</td><td>Choosing and sequencing sales or distribution channels based on factors such as speed, margins, customer fit and brand considerations.</td></tr>
+      <tr><td>Phased Expansion</td><td>Entering a market progressively, validating demand and building capabilities before committing to larger or harder-to-reverse investments.</td></tr>
+    </table>
+  </div>
+
+</div>
+
+<script>
+const QUESTIONS = [
+  {
+    q: "What should Kokoa establish before deciding how to expand?",
+    opts: [
+      "Whether it can open the maximum possible number of stores immediately",
+      "Whether the addressable premium chocolate market is large enough to support its revenue ambition",
+      "Whether every Indian consumer prefers dark chocolate",
+      "Whether competitors will exit the market"
+    ],
+    correct: 1,
+    why: "Kokoa wants to grow from ₹100 Cr today to ₹300 Cr by Year 2 and ₹500 Cr by Year 3. Before deciding how to expand, it needs to determine whether sufficient market demand exists to support this ambition.",
+    learnt: "In a market-entry problem, first ask: \"Is the market attractive enough to support the client's ambition?\" Only then should you determine how to enter or expand."
+  },
+  {
+    q: "Which information would be most useful when assessing whether Kokoa's growth ambition is realistic?",
+    opts: [
+      "The number of flagship stores Kokoa currently operates",
+      "The size and growth rate of India's premium chocolate market",
+      "The number of employees at Kokoa",
+      "The number of chocolate flavours Kokoa offers"
+    ],
+    correct: 1,
+    why: "The size and growth of the addressable market determine how much room exists for Kokoa to grow. Kokoa's current footprint and product range are relevant to execution, but they do not establish the overall market opportunity.",
+    learnt: "When assessing market attractiveness, focus first on market size and growth, and then consider how much of that market the company could realistically capture."
+  },
+  {
+    q: "Which market-size estimate should Kokoa use as the more appropriate planning benchmark?",
+    opts: [
+      "₹500 Cr, because Kokoa currently operates in only two cities",
+      "₹1,000 Cr, because premium chocolate is a niche category",
+      "Approximately ₹2,000 Cr, because this represents the tighter definition of the addressable premium chocolate market",
+      "₹5,400 Cr, because the upper-bound estimate is always the most appropriate"
+    ],
+    correct: 2,
+    why: "The ₹5,400 Cr calculation represents an upper-bound estimate based on broader assumptions. The case states that a tighter definition of premium chocolate results in an addressable market of approximately ₹2,000 Cr, which is the more appropriate benchmark for evaluating Kokoa's ambition.",
+    learnt: "Market sizing is not about producing one number and stopping. Consultants should pressure-test assumptions and distinguish between an upper-bound market estimate and a realistic addressable market."
+  },
+  {
+    q: "Kokoa wants to reach ₹300 Cr revenue by Year 2. What would this represent against a ₹2,000 Cr addressable market?",
+    opts: [
+      "5% market share",
+      "10% market share",
+      "15% market share",
+      "30% market share"
+    ],
+    correct: 2,
+    why: "Kokoa's required market share would be ₹300 Cr ÷ ₹2,000 Cr × 100 = 15%. The case describes this as aggressive but achievable if the category continues growing at 15%+ annually and Kokoa selects the right channels.",
+    learnt: "A market-size estimate becomes much more useful when you translate the client's revenue target into the market share required to achieve it."
+  },
+  {
+    q: "Which risk is particularly important for Kokoa because it could directly undermine the brand premium it is trying to preserve?",
+    opts: [
+      "Rapid expansion could dilute Kokoa's artisan positioning and damage its premium brand",
+      "Having 80 employees",
+      "Having three flagship stores in Mumbai",
+      "Selling chocolate at ₹250–₹600 per bar"
+    ],
+    correct: 0,
+    why: "Kokoa's success depends not only on growing revenue but also on preserving its brand premium. Rapid expansion that leads to inconsistent execution or a quality incident could damage the brand that differentiates Kokoa from competitors. The original case identifies brand dilution as a major expansion risk.",
+    learnt: "In strategy, think beyond immediate financial impact. Ask: \"What could damage the company's competitive advantage?\""
+  },
+  {
+    q: "Why should Kokoa prioritise D2C, premium modern trade and gifting in Year 1?",
+    opts: [
+      "They eliminate all operating costs.",
+      "They offer a combination of brand fit, speed to scale and access to target customers and opportunities to scale without immediately relying on a large flagship-store footprint, while allowing Kokoa to build its presence before making larger physical investments.",
+      "They guarantee that Kokoa will achieve 15% market share.",
+      "They are the only channels available to premium chocolate brands."
+    ],
+    correct: 1,
+    why: "The recommended Year 1 channels allow Kokoa to expand its reach without immediately committing to extensive flagship-store investment. D2C offers high brand fit and customer-data ownership, premium modern trade offers high brand fit and access to the target demographic, and gifting offers high average order value and premium brand fit. Together, these channels provide a strong starting point for expansion.",
+    learnt: "A channel strategy should consider more than revenue. Brand fit, margins, speed and investment requirements all matter."
+  },
+  {
+    q: "Why should flagship stores be introduced later rather than being the primary Year 1 expansion vehicle?",
+    opts: [
+      "Flagship stores have the lowest margins of all channels.",
+      "Flagship stores are slow and capital-intensive, so Kokoa should first validate demand before committing significant real-estate investment.",
+      "Flagship stores are unsuitable for premium chocolate brands.",
+      "Kokoa is legally prohibited from opening stores outside Mumbai and Delhi."
+    ],
+    correct: 1,
+    why: "Flagship stores offer high margins and strong brand control, but they are expensive and slow to scale. Using D2C, modern trade and gifting first allows Kokoa to validate market response before committing to additional real-estate investment.",
+    learnt: "When uncertainty is high, validate demand before making large, difficult-to-reverse investments."
+  },
+  {
+    q: "Which recommendation best addresses Kokoa's growth ambition while protecting its premium positioning?",
+    opts: [
+      "Open flagship stores across 50 cities immediately to maximise brand visibility.",
+      "Focus only on D2C and avoid physical retail completely.",
+      "Scale through a phased, channel-led rollout: D2C, premium modern trade and gifting in Year 1; add quick commerce and HoReCa in Year 2; and introduce selected flagship stores in Year 3.",
+      "Enter discount retail and mass modern trade to maximise volume."
+    ],
+    correct: 2,
+    why: "The recommended sequence balances growth, margin, brand fit and investment risk: Year 1 is D2C + premium modern trade + gifting, Year 2 adds quick commerce + HoReCa, and Year 3 opens 4–6 flagship stores in selected metros. This allows Kokoa to build reach and validate demand before committing to larger physical investments. The case also explicitly states that discount retail and mass modern trade are off-limits because they could dilute the premium positioning.",
+    learnt: "Sometimes the best strategy is not to choose one channel, but to sequence different channels over time based on their strengths and the company's evolving capabilities."
+  }
+];
+
+const LETTERS = ["A","B","C","D"];
+let current = 0;
+const answers = new Array(QUESTIONS.length).fill(null);
+
+const quizEl = document.getElementById('quiz');
+const fill = document.getElementById('progressFill');
+const label = document.getElementById('progressLabel');
+
+function getScore(){
+  return answers.reduce((sum, sel, idx) => sum + (sel === QUESTIONS[idx].correct ? 1 : 0), 0);
+}
+
+function updateProgress(){
+  const pct = current < QUESTIONS.length ? (current / QUESTIONS.length) * 100 : 100;
+  fill.style.width = pct + '%';
+  label.textContent = current < QUESTIONS.length
+    ? `Question ${current+1} of ${QUESTIONS.length}`
+    : `Complete: ${QUESTIONS.length} of ${QUESTIONS.length}`;
+}
+
+function renderQuestion(){
+  updateProgress();
+  document.getElementById('results').classList.remove('show');
+  document.getElementById('lede').style.display = current === 0 ? '' : 'none';
+  const item = QUESTIONS[current];
+  const answered = answers[current];
+
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.innerHTML = `
+    <div class="qcount">Question ${current+1} of ${QUESTIONS.length}</div>
+    <div class="qtext">${item.q}</div>
+    <div class="css-quiz-group"></div>
+    <div class="feedback">
+      <div class="why"><strong>Explanation:</strong> ${item.why}</div>
+      <div class="learnt"><strong>Takeaway:</strong> ${item.learnt}</div>
+    </div>
+    <div class="navrow">
+      <button class="prevbtn" type="button" ${current === 0 ? "disabled" : ""}>Previous</button>
+      <button class="nextbtn" type="button" ${answered === null ? "disabled" : ""}>${current === QUESTIONS.length-1 ? "See results" : "Next question"}</button>
+    </div>
+  `;
+
+  const group = card.querySelector('.css-quiz-group');
+  item.opts.forEach((text, i)=>{
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'css-quiz-opt';
+    btn.textContent = `${LETTERS[i]}. ${text}`;
+    if(answered === null){
+      btn.addEventListener('click', ()=> selectOption(i, card));
+    } else {
+      btn.disabled = true;
+      if(i === item.correct) btn.classList.add('correct');
+      else if(i === answered) btn.classList.add('wrong');
+      else btn.classList.add('dim');
+    }
+    group.appendChild(btn);
+  });
+
+  if(answered !== null){
+    card.querySelector('.feedback').classList.add('show');
+  }
+
+  card.querySelector('.prevbtn').addEventListener('click', ()=>{
+    if(current > 0){
+      current--;
+      renderQuestion();
+    }
+  });
+  card.querySelector('.nextbtn').addEventListener('click', ()=>{
+    current++;
+    if(current < QUESTIONS.length){
+      renderQuestion();
+    } else {
+      showResults();
+    }
+  });
+
+  quizEl.innerHTML = '';
+  quizEl.appendChild(card);
+}
+
+function selectOption(i, card){
+  const item = QUESTIONS[current];
+  answers[current] = i;
+  const opts = card.querySelectorAll('.css-quiz-opt');
+  opts.forEach((btn, idx)=>{
+    btn.disabled = true;
+    if(idx === item.correct) btn.classList.add('correct');
+    else if(idx === i) btn.classList.add('wrong');
+    else btn.classList.add('dim');
+  });
+
+  card.querySelector('.feedback').classList.add('show');
+  card.querySelector('.nextbtn').disabled = false;
+}
+
+function getRankTitle(score){
+  if(score === 8) return "CasedIt!";
+  if(score >= 6) return "Sharp Analyst";
+  if(score >= 4) return "Budding Consultant";
+  return "Case Rookie";
+}
+
+function showResults(){
+  updateProgress();
+  quizEl.innerHTML = '';
+  document.getElementById('results').classList.add('show');
+  const score = getScore();
+  document.getElementById('scoreVal').textContent = score;
+  document.getElementById('rankTitle').textContent = getRankTitle(score);
+  const msgEl = document.getElementById('scoreMsg');
+  let msg;
+  if(score === 8) msg = "Full marks. You navigated Kokoa from market sizing to channel strategy without missing a step.";
+  else if(score >= 6) msg = "Strong case sense. Revisit the misses above to sharpen the diagnosis further.";
+  else if(score >= 4) msg = "A solid start. Review the recap below to reinforce the framework before the next caselet.";
+  else msg = "Worth a second pass. Walk back through the reasoning in each explanation above.";
+  msgEl.textContent = msg;
+}
+
+renderQuestion();
+</script>
+</body>
+</html>
